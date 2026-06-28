@@ -16,7 +16,9 @@ Prove It" assignment.
 - 🌪️ "Most volatile" indicator (std dev of daily % price swings), with its own chart tab.
 - 📊 Bar chart of total growth alongside the line chart.
 - 💸 "What if I invested $X?" calculator for each selected stock.
-- 📰 A real "Did you know?" fact about Netflix and Blockbuster.
+- 📰 A "Did you know?" panel of 55 real stock-market fun facts that advances to
+  the next fact (in order, looping back to the first) every time you reload
+  the page.
 - 🎨 Live in-app theme picker (sidebar → "Appearance") — switch between Dark,
   Light, Ocean, and Sunset, or pick a custom accent color, and the whole UI
   (backgrounds, charts, chips, slider, tabs) re-skins instantly.
