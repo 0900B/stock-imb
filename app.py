@@ -62,19 +62,29 @@ for t in chosen:
     rebased[t] = rebased[t] / rebased[t].iloc[0]
 
 growths = {t: (rebased[t].iloc[-1] - 1) * 100 for t in chosen}
+volatility = {t: view[t].pct_change().dropna().std() * 100 for t in chosen}
 best = max(growths, key=growths.get)
+most_volatile = max(volatility, key=volatility.get)
 
-cols = st.columns(len(chosen) + 1)
+cols = st.columns(len(chosen) + 2)
 for col, t in zip(cols, chosen):
-    label = f"🏆 {t}" if t == best and len(chosen) > 1 else t
+    label = t
+    if t == best and len(chosen) > 1:
+        label = f"🏆 {label}"
+    if t == most_volatile and len(chosen) > 1:
+        label = f"🌪️ {label}"
     col.metric(label, f"{rebased[t].iloc[-1]:.2f}x", f"{growths[t]:+.1f}%")
 
-with cols[-1]:
-    st.metric("Best performer", best, f"{growths[best]:+.1f}%")
+with cols[-2]:
+    st.metric("🏆 Best performer", best, f"{growths[best]:+.1f}%")
     st.caption(f"${investment:,.0f} invested in {best} would now be worth "
                f"${investment * rebased[best].iloc[-1]:,.0f}.")
 
-tab1, tab2 = st.tabs(["📈 Growth over time", "📊 Total growth"])
+with cols[-1]:
+    st.metric("🌪️ Most volatile", most_volatile, f"{volatility[most_volatile]:.2f}% daily swing")
+    st.caption("Standard deviation of daily % price changes — higher means bumpier.")
+
+tab1, tab2, tab3 = st.tabs(["📈 Growth over time", "📊 Total growth", "🌪️ Volatility"])
 
 with tab1:
     fig = px.line(rebased, x="date", y=chosen, title="Normalized price over time")
@@ -93,6 +103,19 @@ with tab2:
     )
     bar_fig.update_layout(yaxis_title="Growth (%)", showlegend=False)
     st.plotly_chart(bar_fig, use_container_width=True)
+
+with tab3:
+    vol_df = pd.DataFrame({"stock": list(volatility.keys()), "volatility_%": list(volatility.values())})
+    vol_fig = px.bar(
+        vol_df.sort_values("volatility_%", ascending=False),
+        x="stock",
+        y="volatility_%",
+        color="stock",
+        title="Daily price volatility by stock (std dev of daily % change)",
+        text_auto=".2f",
+    )
+    vol_fig.update_layout(yaxis_title="Volatility (% daily std dev)", showlegend=False)
+    st.plotly_chart(vol_fig, use_container_width=True)
 
 st.divider()
 st.subheader("💸 What if I had invested?")
