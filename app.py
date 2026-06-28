@@ -3,6 +3,57 @@ import plotly.express as px
 import streamlit as st
 
 st.set_page_config(page_title="Stock Explorer", page_icon="📈", layout="wide")
+
+THEMES = {
+    "🌙 Dark": dict(bg="#0E1117", secondary_bg="#1C2128", text="#E6EDF3", primary="#00C896", dark=True),
+    "☀️ Light": dict(bg="#FFFFFF", secondary_bg="#F0F2F6", text="#262730", primary="#FF4B4B", dark=False),
+    "🌊 Ocean": dict(bg="#0B1E2D", secondary_bg="#13344A", text="#E0F2FE", primary="#38BDF8", dark=True),
+    "🌅 Sunset": dict(bg="#1A1025", secondary_bg="#2D1B3D", text="#FDE8D8", primary="#FB923C", dark=True),
+}
+
+with st.sidebar.expander("🎨 Appearance", expanded=False):
+    theme_name = st.selectbox("Theme", list(THEMES.keys()))
+    accent = st.color_picker("Accent color", THEMES[theme_name]["primary"])
+
+theme = {**THEMES[theme_name], "primary": accent}
+plotly_template = "plotly_dark" if theme["dark"] else "plotly_white"
+
+st.markdown(
+    f"""
+    <style>
+    .stApp, [data-testid="stAppViewContainer"], [data-testid="stHeader"] {{
+        background-color: {theme['bg']} !important;
+        color: {theme['text']} !important;
+    }}
+    [data-testid="stSidebar"] {{
+        background-color: {theme['secondary_bg']} !important;
+    }}
+    .stApp p, .stApp span, .stApp label, .stApp h1, .stApp h2, .stApp h3,
+    [data-testid="stMetricLabel"], [data-testid="stMetricValue"] {{
+        color: {theme['text']} !important;
+    }}
+    [data-testid="stMultiSelect"] span[data-baseweb="tag"] {{
+        background-color: {theme['primary']} !important;
+    }}
+    div[role="slider"] {{
+        background-color: {theme['primary']} !important;
+        border-color: {theme['primary']} !important;
+    }}
+    button[role="tab"][aria-selected="true"] {{
+        color: {theme['primary']} !important;
+        border-bottom-color: {theme['primary']} !important;
+    }}
+    [role="tablist"] > div[role="presentation"] {{
+        background-color: {theme['primary']} !important;
+    }}
+    button[kind="primary"], button[kind="secondary"] {{
+        border-color: {theme['primary']} !important;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+
 st.title("📈 Stock Price Explorer")
 st.caption("Comparing growth of major tech stocks since January 2018.")
 
@@ -86,9 +137,16 @@ with cols[-1]:
 
 tab1, tab2, tab3 = st.tabs(["📈 Growth over time", "📊 Total growth", "🌪️ Volatility"])
 
+chart_style = dict(
+    template=plotly_template,
+    paper_bgcolor=theme["bg"],
+    plot_bgcolor=theme["bg"],
+    font_color=theme["text"],
+)
+
 with tab1:
     fig = px.line(rebased, x="date", y=chosen, title="Normalized price over time")
-    fig.update_layout(yaxis_title="Growth multiple", legend_title="Stock")
+    fig.update_layout(yaxis_title="Growth multiple", legend_title="Stock", **chart_style)
     st.plotly_chart(fig, use_container_width=True)
 
 with tab2:
@@ -101,7 +159,7 @@ with tab2:
         title="Total growth by stock over selected range",
         text_auto=".1f",
     )
-    bar_fig.update_layout(yaxis_title="Growth (%)", showlegend=False)
+    bar_fig.update_layout(yaxis_title="Growth (%)", showlegend=False, **chart_style)
     st.plotly_chart(bar_fig, use_container_width=True)
 
 with tab3:
@@ -114,7 +172,7 @@ with tab3:
         title="Daily price volatility by stock (std dev of daily % change)",
         text_auto=".2f",
     )
-    vol_fig.update_layout(yaxis_title="Volatility (% daily std dev)", showlegend=False)
+    vol_fig.update_layout(yaxis_title="Volatility (% daily std dev)", showlegend=False, **chart_style)
     st.plotly_chart(vol_fig, use_container_width=True)
 
 st.divider()
