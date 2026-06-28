@@ -61,8 +61,10 @@ streamlit run app.py
 ## Reflection
 
 The GitHub integration was the biggest time-saver — pushing files and fixing
-the empty-repo edge case took seconds instead of a manual git setup. What
-surprised me most was how much the "best performer" and "what if I invested"
-features changed the feel of the app: the starter chart was informative, but
-those two additions made it feel like a tool you'd actually hand to a boss
-and not just a demo.
+the empty-repo edge case took seconds instead of a manual git setup. The
+hardest part was the live theme picker: Streamlit doesn't expose its colors
+as CSS variables, so re-skinning the app on the fly meant reverse-engineering
+hidden DOM structure just to recolor a single 2-pixel-tall tab indicator.
+That kind of detail, plus small touches like the rotating fun facts, is what
+turned a class assignment into something I'd actually hand to a boss instead
+of just a demo.
