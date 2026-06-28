@@ -6,7 +6,7 @@ Prove It" assignment.
 
 ## Live app
 
-🔗 **[stock-explorer.streamlit.app](https://share.streamlit.io)** — link to be added once deployed on Streamlit Community Cloud.
+🔗 **[stock-imb-daehtti5izvezxuemnmpyf.streamlit.app](https://stock-imb-daehtti5izvezxuemnmpyf.streamlit.app/)**
 
 ## Features
 
@@ -36,5 +36,9 @@ streamlit run app.py
 
 ## Reflection
 
-_TODO: add 3–5 lines — which MCP/tool helped most, and one thing that
-surprised you._
+The GitHub integration was the biggest time-saver — pushing files and fixing
+the empty-repo edge case took seconds instead of a manual git setup. What
+surprised me most was how much the "best performer" and "what if I invested"
+features changed the feel of the app: the starter chart was informative, but
+those two additions made it feel like a tool you'd actually hand to a boss
+and not just a demo.
