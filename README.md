@@ -17,8 +17,10 @@ Prove It" assignment.
 - 📊 Bar chart of total growth alongside the line chart.
 - 💸 "What if I invested $X?" calculator for each selected stock.
 - 📰 A real "Did you know?" fact about Netflix and Blockbuster.
-- 🎨 Custom dark theme (`.streamlit/config.toml`) and a responsive layout that
-  reflows cleanly on a phone screen.
+- 🎨 Live in-app theme picker (sidebar → "Appearance") — switch between Dark,
+  Light, Ocean, and Sunset, or pick a custom accent color, and the whole UI
+  (backgrounds, charts, chips, slider, tabs) re-skins instantly.
+- 📱 Responsive layout that reflows cleanly on a phone screen.
 
 ## Architecture
 
